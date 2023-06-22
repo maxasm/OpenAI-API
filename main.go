@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bufio"
+	"errors"
+	"strings"
 	"time"
 	"bytes"
 	"encoding/json"
@@ -11,7 +14,10 @@ import (
 	"os"
 )
 
-func main() {
+func chat(prompt string) (string, error) {
+	if len(strings.Trim(prompt, " ")) == 0 {
+		return "", errors.New("You can't give an empty prompt! (Also, this is how you exit 😉)")
+	}
 	// The API endpoint
 	const URL = "https://api.openai.com/v1/chat/completions"
 
@@ -36,8 +42,8 @@ func main() {
 	api_req := OPEN_AI_API_REQUEST{
 		Model: GPT3,
 		Messages: []OPEN_AI_API_MESSAGE{
-			{Role: "system", Content: "You are a physics genious"},
-			{Role: "user", Content: "Give me a random fan fuct about modern physics"},
+			{Role: "system", Content: "You are a helpful assistant who follows the given prompt. Use emojis where possible."},
+			{Role: "user", Content:prompt},
 		},
 	}
 
@@ -73,5 +79,28 @@ func main() {
 	
 	// Print out the response
 	msg := resp_obj.Choices[0].Message
-	fmt.Printf("%s\n", msg.Content)	
+	return msg.Content, nil	
+}
+
+// Todo: Concatinate the messages
+// Todo: Block the input when the system is waiting for the reponse
+// Todo: Implement the CTRL + L to clear the screen
+func main() {
+	// Simple chat bot on the terminal
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Printf("BOT > Hey 👋, how can I help you.\n")
+	fmt.Printf("You > ")
+
+	for scanner.Scan() {
+		// Read input from the user
+		user_prompt := scanner.Text()
+		bot_response, err_bot_response := chat(user_prompt)
+		
+		if err_bot_response != nil {
+			log.Fatalf("%s\n", err_bot_response)
+		}
+	
+		fmt.Printf("BOT > %s\n", bot_response)
+		fmt.Printf("You > ")
+	}
 }
