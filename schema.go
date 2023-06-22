@@ -16,7 +16,7 @@ type OPEN_AI_API_REQUEST struct {
 
 type OPEN_AI_API_CHOICE struct {
 	Index        uint                `json:"index"`
-	Message      OPEN_AI_API_MESSAGE `json:"messsage"`
+	Message      OPEN_AI_API_MESSAGE `json:"message"`
 	FinishReason string              `json:"finish_reason"`
 }
 
@@ -30,6 +30,6 @@ type OPEN_AI_API_RESPONSE struct {
 	Id      string               `json:"id"`
 	Object  string               `json:"object"`
 	Created uint                 `json:"created"`
-	Choices []OPEN_AI_API_CHOICE `json:"choices"`
 	Usage   OPEN_AI_API_USAGE    `json:"usage"`
+	Choices []OPEN_AI_API_CHOICE `json:choices`
 }
