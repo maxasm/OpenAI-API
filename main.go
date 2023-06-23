@@ -85,6 +85,8 @@ func chat(prompt string) (string, error) {
 // Todo: Concatinate the messages
 // Todo: Block the input when the system is waiting for the reponse
 // Todo: Implement the CTRL + L to clear the screen
+// Todo: Implment scrolling up to past prompts
+
 func main() {
 	// Simple chat bot on the terminal
 	scanner := bufio.NewScanner(os.Stdin)
